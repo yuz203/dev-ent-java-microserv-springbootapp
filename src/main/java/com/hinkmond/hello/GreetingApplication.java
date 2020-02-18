@@ -1,20 +1,32 @@
 package com.hinkmond.hello;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
+
 
 @SpringBootApplication
-public class GreetingApplication extends SpringBootServletInitializer {
+public class GreetingApplication {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(GreetingApplication.class);
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return beansProvidedBySpringBoot -> {
+            System.out.println("CommandLineRunner called.  Now, list the beans provided by Spring Boot:");
+
+            String[] beanNames = ctx.getBeanDefinitionNames();
+            Arrays.sort(beanNames);
+            for (String beanName : beanNames) {
+                System.out.println(beanName);
+            }
+        };
     }
 
     public static void main(String[] args) {
-        System.out.println("The Web application named, GreetingApplication, is being started by Spring Boot!");
+        System.out.println("GreetingApplication is starting up Spring Boot to run as a Web Application!");
         SpringApplication.run(GreetingApplication.class, args);
     }
 
